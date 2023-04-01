@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Agence.Api.Application\Agence.Api.Application.csproj" />
+    <ProjectReference Include="..\Agence.Api.Domain\Agence.Api.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Repositories\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
 </Project>

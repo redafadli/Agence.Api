@@ -2,17 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Agence.Api.Application.Services;
+using Agence.Api.Application.Services.Interfaces;
+using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Agence.Api.Controllers {
-    [Route("(controller")]
+    [Route("[controller]")]
     [ApiController]
     public class ListingController : Controller {
 
-        public ListingController() {
+        private readonly IListingService _listingService;
 
+        public ListingController(IListingService listingService) {
+            _listingService = listingService ?? throw new ArgumentNullException(nameof(listingService));
+        }
+
+        [HttpGet("search/{term}")]
+        public async Task<IEnumerable<Listing>> SearchListingsAsync([FromRoute] string term) {
+            return await _listingService.SearchListingsAsync(term);
         }
     }
 }

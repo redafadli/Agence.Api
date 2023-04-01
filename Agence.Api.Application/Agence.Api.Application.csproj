@@ -6,4 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Services\" />
+    <None Remove="Services\Interfaces\" />
+    <None Remove="Repositories\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Services\Interfaces\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Agence.Api.Domain\Agence.Api.Domain.csproj" />
+  </ItemGroup>
 </Project>

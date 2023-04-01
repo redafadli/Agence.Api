@@ -1,16 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Microsoft.Owin.Security.OAuth" Version="4.2.2" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.5" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Agence.Api.Application\Agence.Api.Application.csproj">
+			<GlobalPropertiesToRemove>
+			</GlobalPropertiesToRemove>
+		</ProjectReference>
+		<ProjectReference Include="..\Agence.Api.Infrastructure\Agence.Api.Infrastructure.csproj">
+			<GlobalPropertiesToRemove>
+			</GlobalPropertiesToRemove>
+		</ProjectReference>
+	</ItemGroup>
 </Project>
