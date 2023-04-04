@@ -18,6 +18,11 @@ namespace Agence.Api.Controllers {
             _listingService = listingService ?? throw new ArgumentNullException(nameof(listingService));
         }
 
+        [HttpGet("")]
+        public async Task<IEnumerable<Listing>> GetListingsAsync() {
+            return await _listingService.GetListingsAsync();
+        }
+
         [HttpGet("search/{term}")]
         public async Task<IEnumerable<Listing>> SearchListingsAsync([FromRoute] string term) {
             return await _listingService.SearchListingsAsync(term);

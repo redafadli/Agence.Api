@@ -15,6 +15,9 @@ namespace Agence.Api.Infrastructure.Repositories {
         public async Task<IEnumerable<Listing>> SearchListingsAsync(string term) {
             return await Task.Run(() => listings.Where(l => l.Title.Contains(term, StringComparison.InvariantCultureIgnoreCase)));
         }
+
+        public async Task<IEnumerable<Listing>> GetListingsAsync() {
+            return await Task.Run(() => listings);
+        }
     }
 }
-
