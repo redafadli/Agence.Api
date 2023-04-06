@@ -29,10 +29,9 @@ namespace Agence.Api.Controllers {
         }
 
         [HttpGet("{id}")]
-        public async Task<Listing> GetListingAsync([FromRoute] int id)
-        {
+        public async Task<Listing> GetListingAsync([FromRoute] int id) {
             return await _listingService.GetListingAsync(id);
         }
     }
-}
 
+}
