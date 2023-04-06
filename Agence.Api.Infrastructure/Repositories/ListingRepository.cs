@@ -15,15 +15,6 @@ namespace Agence.Api.Infrastructure.Repositories {
         public async Task<IEnumerable<Listing>> SearchListingsAsync(string term) {
             return await Task.Run(() => Listings.Where(l => l.Title.Contains(term, StringComparison.InvariantCultureIgnoreCase)));
         }
-<<<<<<< Updated upstream
-=======
-
-        public async Task<IEnumerable<Listing[]>> GetListingsAsync() {
-
-        }
-    }
-}
->>>>>>> Stashed changes
 
         public async Task<IEnumerable<Listing>> GetListingsAsync() {
             return await Task.Run(() => Listings);

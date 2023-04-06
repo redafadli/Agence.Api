@@ -18,12 +18,11 @@ namespace Agence.Api.Application.Services {
         public async Task<IEnumerable<Listing>> GetListingsAsync() {
             return await _listingRepository.GetListingsAsync();
         }
-        
+
         public async Task<Listing> GetListingAsync(int id) {
             return await _listingRepository.GetListingAsync(id);
         }
 
-        
+
     }
 }
-
