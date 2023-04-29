@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Agence.Api.Infrastructure.Repositories {
     public class ListingRepository : IListingRepository {
@@ -47,6 +48,7 @@ namespace Agence.Api.Infrastructure.Repositories {
                     newListing.City = reader.GetString(3);
                     newListing.Description = reader.GetString(4);
                     newListing.Address = reader.GetString(5);
+                    newListing.Image = reader.GetString(6);
                     Listingslist.Add(newListing);
                 };
 
@@ -70,12 +72,38 @@ namespace Agence.Api.Infrastructure.Repositories {
                     City = reader.GetString(3),
                     Description = reader.GetString(4),
                     Address = reader.GetString(5),
+                    Image = reader.GetString(6)
                 };
                 _connection.Close();
                 return await Task.Run(() => listing);
             }
             _connection.Close();
             return null;
+        }
+
+        public async Task<IActionResult> PostListingAsync(Listing listing)
+        {
+
+            using (SqlCommand cmdPostListing = new SqlCommand("INSERT INTO Listings (name, price, city, description, address, image_url) " +
+                "VALUES ( @name , @price , @city , @description ,@address, @image)", _connection))
+            {
+                cmdPostListing.Parameters.AddWithValue("@name", listing.Title);
+                cmdPostListing.Parameters.AddWithValue("@price", listing.Price);
+                cmdPostListing.Parameters.AddWithValue("@city", listing.City);
+                cmdPostListing.Parameters.AddWithValue("@description", listing.Description);
+                cmdPostListing.Parameters.AddWithValue("@address", listing.Address);
+                cmdPostListing.Parameters.AddWithValue("@image", listing.Image);
+                _connection.Open();
+                int rowsAffected = cmdPostListing.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return new OkResult();
+                }
+                else
+                {
+                    return new BadRequestResult();
+                }
+            }
         }
     }
 }

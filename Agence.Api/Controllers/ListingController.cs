@@ -14,23 +14,34 @@ namespace Agence.Api.Controllers {
 
         private readonly IListingService _listingService;
 
-        public ListingController(IListingService listingService) {
+        public ListingController(IListingService listingService)
+        {
             _listingService = listingService ?? throw new ArgumentNullException(nameof(listingService));
         }
 
         [HttpGet("/")]
-        public async Task<IEnumerable<Listing>> GetListingsAsync() {
+        public async Task<IEnumerable<Listing>> GetListingsAsync()
+        {
             return await _listingService.GetListingsAsync();
         }
 
         [HttpGet("search/{term}")]
-        public async Task<IEnumerable<Listing>> SearchListingsAsync([FromRoute] string term) {
+        public async Task<IEnumerable<Listing>> SearchListingsAsync([FromRoute] string term)
+        {
             return await _listingService.SearchListingsAsync(term);
         }
 
         [HttpGet("{id}")]
-        public async Task<Listing> GetListingAsync([FromRoute] int id) {
+        public async Task<Listing> GetListingAsync([FromRoute] int id)
+        {
             return await _listingService.GetListingAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostListingAsync(Listing listing)
+        {
+            return await _listingService.PostListingAsync(listing);
+
         }
     }
 
