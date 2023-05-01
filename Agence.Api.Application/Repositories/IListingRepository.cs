@@ -10,4 +10,3 @@ namespace Agence.Api.Application.Repositories {
         Task<IActionResult> PostListingAsync(Listing listing);
     }
 }
-
