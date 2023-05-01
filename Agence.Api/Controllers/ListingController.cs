@@ -38,11 +38,10 @@ namespace Agence.Api.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostListingAsync(Listing listing)
+        public async Task<IActionResult> PostListingAsync([FromBody] Listing listing)
         {
             return await _listingService.PostListingAsync(listing);
 
         }
     }
-
 }

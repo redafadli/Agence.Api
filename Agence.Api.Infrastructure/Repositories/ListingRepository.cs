@@ -28,7 +28,7 @@ namespace Agence.Api.Infrastructure.Repositories {
 
         public async Task<IEnumerable<Listing>> SearchListingsAsync(string term)
         {
-            return await Task.Run(() => Listings.Where(l => l.Title.Contains(term, StringComparison.InvariantCultureIgnoreCase)));
+            return await Task.Run(() => Listings.Where(l => l.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public async Task<IEnumerable<Listing>> GetListingsAsync()
@@ -43,7 +43,7 @@ namespace Agence.Api.Infrastructure.Repositories {
                 {
                     Listing newListing = new Listing();
                     newListing.Id = reader.GetInt32(0);
-                    newListing.Title = reader.GetString(1);
+                    newListing.Name = reader.GetString(1);
                     newListing.Price = reader.GetDouble(2);
                     newListing.City = reader.GetString(3);
                     newListing.Description = reader.GetString(4);
@@ -59,7 +59,8 @@ namespace Agence.Api.Infrastructure.Repositories {
 
         public async Task<Listing?> GetListingAsync(int id)
         {
-            SqlCommand cmdGetListingById = new SqlCommand("SELECT * FROM Listings WHERE listing_id = " + id, _connection);
+            string sqlQuery = "SELECT * FROM Listings WHERE listing_id = " + id;
+            SqlCommand cmdGetListingById = new SqlCommand(sqlQuery, _connection);
             _connection.Open();
             SqlDataReader reader = cmdGetListingById.ExecuteReader();
             while (reader.Read())
@@ -67,7 +68,7 @@ namespace Agence.Api.Infrastructure.Repositories {
                 Listing listing = new Listing
                 {
                     Id = reader.GetInt32(0),
-                    Title = reader.GetString(1),
+                    Name = reader.GetString(1),
                     Price = reader.GetDouble(2),
                     City = reader.GetString(3),
                     Description = reader.GetString(4),
@@ -83,11 +84,11 @@ namespace Agence.Api.Infrastructure.Repositories {
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
         {
-
-            using (SqlCommand cmdPostListing = new SqlCommand("INSERT INTO Listings (name, price, city, description, address, image_url) " +
-                "VALUES ( @name , @price , @city , @description ,@address, @image)", _connection))
+            string sqlQuery = "INSERT INTO Listings (name, price, city, description, address, image_url) " +
+                "VALUES (@name , @price , @city , @description ,@address, @image)";
+            using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, _connection))
             {
-                cmdPostListing.Parameters.AddWithValue("@name", listing.Title);
+                cmdPostListing.Parameters.AddWithValue("@name", listing.Name);
                 cmdPostListing.Parameters.AddWithValue("@price", listing.Price);
                 cmdPostListing.Parameters.AddWithValue("@city", listing.City);
                 cmdPostListing.Parameters.AddWithValue("@description", listing.Description);
@@ -97,10 +98,12 @@ namespace Agence.Api.Infrastructure.Repositories {
                 int rowsAffected = cmdPostListing.ExecuteNonQuery();
                 if (rowsAffected > 0)
                 {
+                    _connection.Close();
                     return new OkResult();
                 }
                 else
                 {
+                    _connection.Close();
                     return new BadRequestResult();
                 }
             }

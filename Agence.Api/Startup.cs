@@ -14,32 +14,40 @@ using Agence.Api.Infrastructure.Repositories;
 public class Startup {
 
     private readonly string origins = "origins";
-    public Startup(IConfiguration configuration) {
+    public Startup(IConfiguration configuration)
+    {
         Configuration = configuration;
     }
     public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services) {
+    public void ConfigureServices(IServiceCollection services)
+    {
 
         services.AddControllers();
         services.AddSingleton<IListingService, ListingService>();
         services.AddSingleton<IListingRepository, ListingRepository>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options => {
+        services.AddSwaggerGen(options =>
+        {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
 
-        services.AddCors(options => {
-            options.AddPolicy(name: origins, policy => {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: origins, policy =>
+            {
                 policy.AllowAnyOrigin();
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
             });
         });
         services.AddHttpClient();
 
-        services.AddHealthChecksUI(setup => {
+        services.AddHealthChecksUI(setup =>
+        {
             setup.SetEvaluationTimeInSeconds(60);
         })
             .AddInMemoryStorage();
@@ -47,8 +55,10 @@ public class Startup {
         services.AddControllers();
 
         // Register the Swagger services
-        services.AddSwaggerGen(c => {
-            c.SwaggerDoc("v1", new OpenApiInfo {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
                 Title = "Service Agence.Api",
                 Description = "Api Agence.Api",
             });
@@ -62,7 +72,8 @@ public class Startup {
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
         app.UseDeveloperExceptionPage();
 
         app.UseHttpsRedirection();
@@ -73,7 +84,8 @@ public class Startup {
 
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints => {
+        app.UseEndpoints(endpoints =>
+        {
             endpoints.MapControllers();
         });
 
@@ -82,7 +94,8 @@ public class Startup {
 
         // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
         // specifying the Swagger JSON endpoint.
-        app.UseSwaggerUI(c => {
+        app.UseSwaggerUI(c =>
+        {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Agence.Api");
         });
     }
