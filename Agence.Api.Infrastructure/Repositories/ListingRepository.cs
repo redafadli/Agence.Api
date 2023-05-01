@@ -33,8 +33,8 @@ namespace Agence.Api.Infrastructure.Repositories {
 
         public async Task<IEnumerable<Listing>> GetListingsAsync()
         {
-
-            SqlCommand cmdGetListings = new SqlCommand("SELECT * FROM Listings", _connection);
+            string sqlQuery = "SELECT * FROM Listings";
+            SqlCommand cmdGetListings = new SqlCommand(sqlQuery, _connection);
             _connection.Open();
             SqlDataReader reader = cmdGetListings.ExecuteReader();
             List<Listing> Listingslist = new List<Listing>();
@@ -96,14 +96,13 @@ namespace Agence.Api.Infrastructure.Repositories {
                 cmdPostListing.Parameters.AddWithValue("@image", listing.Image);
                 _connection.Open();
                 int rowsAffected = cmdPostListing.ExecuteNonQuery();
+                _connection.Close();
                 if (rowsAffected > 0)
                 {
-                    _connection.Close();
                     return new OkResult();
                 }
                 else
                 {
-                    _connection.Close();
                     return new BadRequestResult();
                 }
             }
