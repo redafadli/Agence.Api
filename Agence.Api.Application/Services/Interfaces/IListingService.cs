@@ -9,5 +9,6 @@ namespace Agence.Api.Application.Services.Interfaces {
         Task<IEnumerable<Listing>> GetListingsAsync();
         Task<Listing> GetListingAsync(int id);
         Task<IActionResult> PostListingAsync(Listing listing);
+        Task<IActionResult> PutListingAsync(Listing listing);
     }
 }

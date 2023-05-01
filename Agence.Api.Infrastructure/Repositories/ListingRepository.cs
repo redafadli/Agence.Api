@@ -57,29 +57,31 @@ namespace Agence.Api.Infrastructure.Repositories {
             return await Task.Run(() => Listingslist);
         }
 
-        public async Task<Listing?> GetListingAsync(int id)
+        public async Task<Listing> GetListingAsync(int id)
         {
             string sqlQuery = "SELECT * FROM Listings WHERE listing_id = " + id;
-            SqlCommand cmdGetListingById = new SqlCommand(sqlQuery, _connection);
-            _connection.Open();
-            SqlDataReader reader = cmdGetListingById.ExecuteReader();
-            while (reader.Read())
+            using (SqlCommand cmdGetListingById = new SqlCommand(sqlQuery, _connection))
             {
-                Listing listing = new Listing
+                _connection.Open();
+                using (SqlDataReader reader = cmdGetListingById.ExecuteReader())
                 {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1),
-                    Price = reader.GetDouble(2),
-                    City = reader.GetString(3),
-                    Description = reader.GetString(4),
-                    Address = reader.GetString(5),
-                    Image = reader.GetString(6)
-                };
-                _connection.Close();
-                return await Task.Run(() => listing);
+                    while (reader.Read())
+                    {
+                        Listing listing = new Listing
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Price = reader.GetDouble(2),
+                            City = reader.GetString(3),
+                            Description = reader.GetString(4),
+                            Address = reader.GetString(5),
+                            Image = reader.GetString(6)
+                        };
+                        return await Task.Run(() => listing);
+                    }
+                    return null;
+                }
             }
-            _connection.Close();
-            return null;
         }
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
@@ -96,14 +98,37 @@ namespace Agence.Api.Infrastructure.Repositories {
                 cmdPostListing.Parameters.AddWithValue("@image", listing.Image);
                 _connection.Open();
                 int rowsAffected = cmdPostListing.ExecuteNonQuery();
-                _connection.Close();
                 if (rowsAffected > 0)
                 {
-                    return new OkResult();
+                    return await Task.Run(() => new OkResult());
                 }
                 else
                 {
-                    return new BadRequestResult();
+                    return await Task.Run(() => new BadRequestResult());
+                }
+            }
+        }
+
+        public async Task<IActionResult> PutListingAsync(Listing listing)
+        {
+            string sqlQuery = "UPDATE Listings SET name = @name, price = @price, city = @city, description = @description, address = @address" +
+                "WHERE listing_id = " + listing.Id;
+            using (SqlCommand cmdPutListing = new SqlCommand(sqlQuery, _connection))
+            {
+                cmdPutListing.Parameters.AddWithValue("@name", listing.Name);
+                cmdPutListing.Parameters.AddWithValue("@price", listing.Price);
+                cmdPutListing.Parameters.AddWithValue("@city", listing.City);
+                cmdPutListing.Parameters.AddWithValue("@description", listing.Description);
+                cmdPutListing.Parameters.AddWithValue("@address", listing.Address);
+                _connection.Open();
+                int rowsAffected = cmdPutListing.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return await Task.Run(() => new OkResult());
+                }
+                else
+                {
+                    return await Task.Run(() => new BadRequestResult());
                 }
             }
         }

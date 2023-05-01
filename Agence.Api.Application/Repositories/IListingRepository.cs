@@ -8,5 +8,6 @@ namespace Agence.Api.Application.Repositories {
         Task<IEnumerable<Listing>> GetListingsAsync();
         Task<Listing> GetListingAsync(int id);
         Task<IActionResult> PostListingAsync(Listing listing);
+        Task<IActionResult> PutListingAsync(Listing listing);
     }
 }

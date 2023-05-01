@@ -32,5 +32,10 @@ namespace Agence.Api.Application.Services {
         {
             return await _listingRepository.PostListingAsync(listing);
         }
+
+        public async Task<IActionResult> PutListingAsync(Listing listing)
+        {
+            return await _listingRepository.PutListingAsync(listing);
+        }
     }
 }
