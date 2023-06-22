@@ -40,7 +40,7 @@ namespace Agence.Api.Infrastructure.Repositories
                             {
                                 Id = reader.GetInt32(0),
                                 User_email = reader.GetString(1),
-                                Listing_Id = reader.GetInt32(2)
+                                Listing_id = reader.GetInt32(2)
                             };
                             return await Task.Run(() => favorite);
                         }
@@ -68,7 +68,7 @@ namespace Agence.Api.Infrastructure.Repositories
                             Favorite newFavorite = new Favorite();
                             newFavorite.Id = reader.GetInt32(0);
                             newFavorite.User_email = reader.GetString(1);
-                            newFavorite.Listing_Id = reader.GetInt32(2);
+                            newFavorite.Listing_id = reader.GetInt32(2);
                             Favoriteslist.Add(newFavorite);
                         }
                         return Favoriteslist;
@@ -84,7 +84,7 @@ namespace Agence.Api.Infrastructure.Repositories
             using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, _connection))
             {
                 cmdPostListing.Parameters.AddWithValue("@user_email", favorite.User_email);
-                cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.Listing_Id);
+                cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.Listing_id);
 
                 _connection.Open();
                 int rowsAffected = cmdPostListing.ExecuteNonQuery();
