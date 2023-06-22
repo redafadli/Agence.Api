@@ -27,6 +27,8 @@ public class Startup {
         services.AddControllers();
         services.AddSingleton<IListingService, ListingService>();
         services.AddSingleton<IListingRepository, ListingRepository>();
+        services.AddSingleton<IFavoriteService, FavoriteService>();
+        services.AddSingleton<IFavoriteRepository, FavoriteRepository>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>

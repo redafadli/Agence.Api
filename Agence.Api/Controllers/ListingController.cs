@@ -7,10 +7,12 @@ using Agence.Api.Application.Services.Interfaces;
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Agence.Api.Controllers {
+namespace Agence.Api.Controllers
+{
     [Route("[controller]")]
     [ApiController]
-    public class ListingController : Controller {
+    public class ListingController : Controller
+    {
 
         private readonly IListingService _listingService;
 

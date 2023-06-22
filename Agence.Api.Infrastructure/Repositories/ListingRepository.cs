@@ -8,16 +8,20 @@ using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.Common;
 
-namespace Agence.Api.Infrastructure.Repositories {
-    public class ListingRepository : IListingRepository {
+namespace Agence.Api.Infrastructure.Repositories
+{
+    public class ListingRepository : IListingRepository
+    {
 
         private SqlConnection _connection;
         private static IEnumerable<Listing>? Listings;
+        private string connectionString;
 
         public ListingRepository()
         {
-            string connectionString = GetConnectionString();
+            connectionString = GetConnectionString();
             _connection = new SqlConnection(connectionString);
         }
 
@@ -34,55 +38,64 @@ namespace Agence.Api.Infrastructure.Repositories {
         public async Task<IEnumerable<Listing>> GetListingsAsync()
         {
             string sqlQuery = "SELECT * FROM Listings";
-            SqlCommand cmdGetListings = new SqlCommand(sqlQuery, _connection);
-            _connection.Open();
-            SqlDataReader reader = cmdGetListings.ExecuteReader();
-            List<Listing> Listingslist = new List<Listing>();
-            while (reader.Read())
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                {
-                    Listing newListing = new Listing();
-                    newListing.Id = reader.GetInt32(0);
-                    newListing.Name = reader.GetString(1);
-                    newListing.Price = reader.GetDouble(2);
-                    newListing.City = reader.GetString(3);
-                    newListing.Description = reader.GetString(4);
-                    newListing.Address = reader.GetString(5);
-                    newListing.Image = reader.GetString(6);
-                    Listingslist.Add(newListing);
-                };
+                await connection.OpenAsync();
 
-            }
-            _connection.Close();
-            return await Task.Run(() => Listingslist);
-        }
-
-        public async Task<Listing> GetListingAsync(int id)
-        {
-            string sqlQuery = "SELECT * FROM Listings WHERE listing_id = " + id;
-            using (SqlCommand cmdGetListingById = new SqlCommand(sqlQuery, _connection))
-            {
-                _connection.Open();
-                using (SqlDataReader reader = cmdGetListingById.ExecuteReader())
+                using (SqlCommand cmdGetListings = new SqlCommand(sqlQuery, connection))
                 {
-                    while (reader.Read())
+                    using (SqlDataReader reader = await cmdGetListings.ExecuteReaderAsync())
                     {
-                        Listing listing = new Listing
+                        List<Listing> Listingslist = new List<Listing>();
+                        while (await reader.ReadAsync())
                         {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            Price = reader.GetDouble(2),
-                            City = reader.GetString(3),
-                            Description = reader.GetString(4),
-                            Address = reader.GetString(5),
-                            Image = reader.GetString(6)
-                        };
-                        return await Task.Run(() => listing);
+                            Listing newListing = new Listing();
+                            newListing.Id = reader.GetInt32(0);
+                            newListing.Name = reader.GetString(1);
+                            newListing.Price = reader.GetDouble(2);
+                            newListing.City = reader.GetString(3);
+                            newListing.Description = reader.GetString(4);
+                            newListing.Address = reader.GetString(5);
+                            newListing.Image = reader.GetString(6);
+                            Listingslist.Add(newListing);
+                        }
+                        return Listingslist;
                     }
-                    return null;
                 }
             }
         }
+
+
+        public async Task<Listing> GetListingByIdAsync(int id)
+        {
+            string sqlQuery = "SELECT * FROM Listings WHERE listing_id = " + id;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand cmdGetListingById = new SqlCommand(sqlQuery, connection))
+                {
+                    using (SqlDataReader reader = cmdGetListingById.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Listing listing = new Listing
+                            {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Price = reader.GetDouble(2),
+                                City = reader.GetString(3),
+                                Description = reader.GetString(4),
+                                Address = reader.GetString(5),
+                                Image = reader.GetString(6)
+                            };
+                            return await Task.Run(() => listing);
+                        }
+                        return null;
+                    }
+                }
+            }
+        }
+
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
         {

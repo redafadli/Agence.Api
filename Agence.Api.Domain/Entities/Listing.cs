@@ -1,6 +1,8 @@
 ﻿using System;
-namespace Agence.Api.Domain.Entities {
-    public class Listing {
+namespace Agence.Api.Domain.Entities
+{
+    public class Listing
+    {
         public int Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }

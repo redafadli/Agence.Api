@@ -25,7 +25,7 @@ namespace Agence.Api.Application.Services {
 
         public async Task<Listing> GetListingAsync(int id)
         {
-            return await _listingRepository.GetListingAsync(id);
+            return await _listingRepository.GetListingByIdAsync(id);
         }
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
