@@ -81,20 +81,24 @@ namespace Agence.Api.Infrastructure.Repositories
         {
             string sqlQuery = "INSERT INTO Favorites (user_email, listing_id) " +
                 "VALUES (@user_email , @listing_id)";
-            using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, _connection))
-            {
-                cmdPostListing.Parameters.AddWithValue("@user_email", favorite.User_email);
-                cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.Listing_id);
 
-                _connection.Open();
-                int rowsAffected = cmdPostListing.ExecuteNonQuery();
-                if (rowsAffected > 0)
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, connection))
                 {
-                    return await Task.Run(() => new OkResult());
-                }
-                else
-                {
-                    return await Task.Run(() => new BadRequestResult());
+                    cmdPostListing.Parameters.AddWithValue("@user_email", favorite.User_email);
+                    cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.Listing_id);
+
+                    await connection.OpenAsync();
+                    int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();
+                    if (rowsAffected > 0)
+                    {
+                        return await Task.Run(() => new OkResult());
+                    }
+                    else
+                    {
+                        return await Task.Run(() => new BadRequestResult());
+                    }
                 }
             }
         }
