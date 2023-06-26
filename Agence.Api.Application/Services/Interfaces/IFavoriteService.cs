@@ -8,7 +8,9 @@ namespace Agence.Api.Application.Services.Interfaces
 	{
         Task<IEnumerable<Favorite>> getFavoritesByEmailAsync(string user_email);
         Task<IActionResult> postFavoriteAsync(Favorite favorite);
+        Task<IActionResult> deleteFavoriteAsync(int favorite_id);
         Task<Favorite> getFavoriteByIdAsync(int id);
+        
     }
 }
 

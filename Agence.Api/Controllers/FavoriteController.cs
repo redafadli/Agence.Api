@@ -35,6 +35,12 @@ namespace Agence.Api.Controllers
         {
             return await _favoriteService.postFavoriteAsync(favorite);
         }
+
+        [HttpDelete("delete/{favorite_id}")]
+        public async Task<IActionResult> DeleteFavoriteAsync([FromRoute] int favorite_id)
+        {
+            return await _favoriteService.deleteFavoriteAsync(favorite_id);
+        }
     }
 }
 

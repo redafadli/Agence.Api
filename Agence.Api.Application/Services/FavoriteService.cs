@@ -15,6 +15,11 @@ namespace Agence.Api.Application.Services
             _favoriteRepository = favoriteRepository;
         }
 
+        public Task<IActionResult> deleteFavoriteAsync(int favorite_id)
+        {
+            return _favoriteRepository.deleteFavoriteAsync(favorite_id);
+        }
+
         public Task<Favorite> getFavoriteByIdAsync(int id)
         {
             return _favoriteRepository.getFavoriteByIdAsync(id);

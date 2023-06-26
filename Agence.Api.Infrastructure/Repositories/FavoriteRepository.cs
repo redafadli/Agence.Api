@@ -102,6 +102,31 @@ namespace Agence.Api.Infrastructure.Repositories
                 }
             }
         }
+
+        public async Task<IActionResult> deleteFavoriteAsync(int favorite_id)
+        {
+            string sqlQuery = "DELETE FROM Favorites WHERE favorite_id = @favoriteId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmdDeleteFavorite = new SqlCommand(sqlQuery, connection))
+                {
+                    cmdDeleteFavorite.Parameters.AddWithValue("@favoriteId", favorite_id);
+
+                    await connection.OpenAsync();
+                    int rowsAffected = await cmdDeleteFavorite.ExecuteNonQueryAsync();
+                    if (rowsAffected > 0)
+                    {
+                        return await Task.Run(() => new OkResult());
+                    }
+                    else
+                    {
+                        return await Task.Run(() => new NotFoundResult());
+                    }
+                }
+            }
+        }
+
     }
 }
 
