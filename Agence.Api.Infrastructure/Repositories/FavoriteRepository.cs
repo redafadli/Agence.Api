@@ -10,8 +10,8 @@ namespace Agence.Api.Infrastructure.Repositories
     public class FavoriteRepository : IFavoriteRepository
     {
         private SqlConnection _connection;
-        private static IEnumerable<Favorite>? Favorites;
         private string connectionString;
+        private static IEnumerable<Favorite>? Favorites;
 
         public FavoriteRepository()
         {
@@ -39,8 +39,8 @@ namespace Agence.Api.Infrastructure.Repositories
                             Favorite favorite = new Favorite
                             {
                                 Id = reader.GetInt32(0),
-                                User_email = reader.GetString(1),
-                                Listing_id = reader.GetInt32(2)
+                                UserEmail = reader.GetString(1),
+                                ListingId = reader.GetInt32(2)
                             };
                             return await Task.Run(() => favorite);
                         }
@@ -67,8 +67,8 @@ namespace Agence.Api.Infrastructure.Repositories
                         {
                             Favorite newFavorite = new Favorite();
                             newFavorite.Id = reader.GetInt32(0);
-                            newFavorite.User_email = reader.GetString(1);
-                            newFavorite.Listing_id = reader.GetInt32(2);
+                            newFavorite.UserEmail = reader.GetString(1);
+                            newFavorite.ListingId = reader.GetInt32(2);
                             Favoriteslist.Add(newFavorite);
                         }
                         return Favoriteslist;
@@ -86,8 +86,8 @@ namespace Agence.Api.Infrastructure.Repositories
             {
                 using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, connection))
                 {
-                    cmdPostListing.Parameters.AddWithValue("@user_email", favorite.User_email);
-                    cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.Listing_id);
+                    cmdPostListing.Parameters.AddWithValue("@user_email", favorite.UserEmail);
+                    cmdPostListing.Parameters.AddWithValue("@listing_id", favorite.ListingId);
 
                     await connection.OpenAsync();
                     int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();

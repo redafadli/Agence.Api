@@ -29,6 +29,8 @@ public class Startup {
         services.AddSingleton<IListingRepository, ListingRepository>();
         services.AddSingleton<IFavoriteService, FavoriteService>();
         services.AddSingleton<IFavoriteRepository, FavoriteRepository>();
+        services.AddSingleton<IAppointmentService, AppointmentService>();
+        services.AddSingleton<IAppointmentRepository, AppointmentRepository>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
