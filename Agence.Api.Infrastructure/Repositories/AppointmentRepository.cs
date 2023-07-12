@@ -63,9 +63,9 @@ namespace Agence.Api.Infrastructure.Repositories
                         {
                             Appointment newAppointment = new Appointment();
                             newAppointment.Id = reader.GetInt32(0);
-                            newAppointment.UserEmail = reader.GetString(1);
-                            newAppointment.AppointmentDateTime = reader.GetDateTime(2);
-                            newAppointment.ListingId = reader.GetInt32(3);
+                            newAppointment.User_email = reader.GetString(1);
+                            newAppointment.Appointment_date_time = reader.GetDateTime(2);
+                            newAppointment.Listing_id = reader.GetInt32(3);
                             Appointmentslist.Add(newAppointment);
                         }
                         return Appointmentslist;
@@ -89,9 +89,9 @@ namespace Agence.Api.Infrastructure.Repositories
                             Appointment appointment = new Appointment
                             {
                                 Id = reader.GetInt32(0),
-                                UserEmail = reader.GetString(1),
-                                AppointmentDateTime = reader.GetDateTime(2),
-                                ListingId = reader.GetInt32(3)
+                                User_email = reader.GetString(1),
+                                Appointment_date_time = reader.GetDateTime(2),
+                                Listing_id = reader.GetInt32(3)
                             };
                             return await Task.Run(() => appointment);
                         }
@@ -110,9 +110,9 @@ namespace Agence.Api.Infrastructure.Repositories
             {
                 using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, connection))
                 {
-                    cmdPostListing.Parameters.AddWithValue("@user_email", appointment.UserEmail);
-                    cmdPostListing.Parameters.AddWithValue("@listing_id", appointment.ListingId);
-                    cmdPostListing.Parameters.AddWithValue("@date_time", appointment.AppointmentDateTime);
+                    cmdPostListing.Parameters.AddWithValue("@user_email", appointment.User_email);
+                    cmdPostListing.Parameters.AddWithValue("@listing_id", appointment.Listing_id);
+                    cmdPostListing.Parameters.AddWithValue("@date_time", appointment.Appointment_date_time);
 
                     await connection.OpenAsync();
                     int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();
@@ -144,9 +144,9 @@ namespace Agence.Api.Infrastructure.Repositories
                         {
                             Appointment newAppointment = new Appointment();
                             newAppointment.Id = reader.GetInt32(0);
-                            newAppointment.UserEmail = reader.GetString(1);
-                            newAppointment.AppointmentDateTime = reader.GetDateTime(2);
-                            newAppointment.ListingId = reader.GetInt32(3);
+                            newAppointment.User_email = reader.GetString(1);
+                            newAppointment.Appointment_date_time = reader.GetDateTime(2);
+                            newAppointment.Listing_id = reader.GetInt32(3);
                             Appointmentslist.Add(newAppointment);
                         }
                         return Appointmentslist;

@@ -4,8 +4,8 @@ namespace Agence.Api.Domain.Entities
 	public class Favorite
 	{
 		public int Id { get; set; }
-        public string UserEmail { get; set; }
-        public int ListingId { get; set; }
+        public string User_email { get; set; }
+        public int Listing_id { get; set; }
     }
 }
 
