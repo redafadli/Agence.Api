@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using System.Reflection;
-using HealthChecks.UI.Client;
-using System.ComponentModel.Design;
 using Agence.Api.Application.Services.Interfaces;
 using Agence.Api.Application.Services;
 using Agence.Api.Application.Repositories;
 using Agence.Api.Infrastructure.Repositories;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using Agence.Api.Infrastructure;
 
 public class Startup {
 
@@ -31,6 +28,8 @@ public class Startup {
         services.AddSingleton<IFavoriteRepository, FavoriteRepository>();
         services.AddSingleton<IAppointmentService, AppointmentService>();
         services.AddSingleton<IAppointmentRepository, AppointmentRepository>();
+        services.AddScoped<IEmailRepository, EmailRepository>();
+        services.AddScoped<IEmailService, EmailService>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
@@ -72,6 +71,16 @@ public class Startup {
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             if (File.Exists(xmlPath))
                 c.IncludeXmlComments(xmlPath);
+        });
+
+        // Add SendGrid configuration
+        IConfigurationSection sendGridConfig = Configuration.GetSection("SendGrid");
+        services.Configure<SendGridOptions>(sendGridConfig);
+
+        services.AddScoped(provider =>
+        {
+            var sendGridOptions = provider.GetRequiredService<IOptions<SendGridOptions>>();
+            return new SendGridClient(sendGridOptions.Value.ApiKey);
         });
     }
 
