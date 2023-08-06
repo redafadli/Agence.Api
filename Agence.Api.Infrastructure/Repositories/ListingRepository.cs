@@ -100,24 +100,30 @@ namespace Agence.Api.Infrastructure.Repositories
         public async Task<IActionResult> PostListingAsync(Listing listing)
         {
             string sqlQuery = "INSERT INTO Listings (name, price, city, description, address, image_url) " +
-                "VALUES (@name , @price , @city , @description ,@address, @image)";
-            using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, _connection))
+                "VALUES (@name, @price, @city, @description, @address, @image)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                cmdPostListing.Parameters.AddWithValue("@name", listing.Name);
-                cmdPostListing.Parameters.AddWithValue("@price", listing.Price);
-                cmdPostListing.Parameters.AddWithValue("@city", listing.City);
-                cmdPostListing.Parameters.AddWithValue("@description", listing.Description);
-                cmdPostListing.Parameters.AddWithValue("@address", listing.Address);
-                cmdPostListing.Parameters.AddWithValue("@image", listing.Image);
-                _connection.Open();
-                int rowsAffected = cmdPostListing.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                using (SqlCommand cmdPostListing = new SqlCommand(sqlQuery, connection))
                 {
-                    return await Task.Run(() => new OkResult());
-                }
-                else
-                {
-                    return await Task.Run(() => new BadRequestResult());
+                    cmdPostListing.Parameters.AddWithValue("@name", listing.Name);
+                    cmdPostListing.Parameters.AddWithValue("@price", listing.Price);
+                    cmdPostListing.Parameters.AddWithValue("@city", listing.City);
+                    cmdPostListing.Parameters.AddWithValue("@description", listing.Description);
+                    cmdPostListing.Parameters.AddWithValue("@address", listing.Address);
+                    cmdPostListing.Parameters.AddWithValue("@image", listing.Image);
+
+                    await connection.OpenAsync();
+                    int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        return await Task.Run(() => new OkResult());
+                    }
+                    else
+                    {
+                        return await Task.Run(() => new BadRequestResult());
+                    }
                 }
             }
         }
