@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Reflection;
+﻿using System.Data.SqlClient;
 using Agence.Api.Application.Repositories;
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;

@@ -30,6 +30,8 @@ public class Startup {
         services.AddSingleton<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IEmailRepository, EmailRepository>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<IImageService, ImageService>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
