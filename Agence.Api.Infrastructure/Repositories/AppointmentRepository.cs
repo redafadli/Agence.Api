@@ -3,24 +3,28 @@ using System.Data.SqlClient;
 using Agence.Api.Application.Repositories;
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
-        private SqlConnection _connection;
-        private string connectionString;
+        //private SqlConnection _connection;
+        private string? connectionString;
+        private readonly IConfiguration _configuration;
 
-        public AppointmentRepository()
+
+        public AppointmentRepository(IConfiguration configuration)
         {
-            connectionString = GetConnectionString();
-            _connection = new SqlConnection(connectionString);
+            _configuration = configuration;
+            connectionString = _configuration.GetConnectionString("MyDB");
+            //_connection = new SqlConnection(connectionString);
         }
 
-        static private string GetConnectionString()
-        {
-            return "Data Source = localhost,1433; Database = MiCasa; Integrated Security = false; User ID = sa; Password = @Reda.2001";
-        }
+        //static private string GetConnectionString()
+        //{
+        //    return "Data Source = localhost,1433; Database = MiCasa; Integrated Security = false; User ID = sa; Password = @Reda.2001";
+        //}
 
         public async Task<IActionResult> deleteAppointmentAsync(int appointment_id)
         {

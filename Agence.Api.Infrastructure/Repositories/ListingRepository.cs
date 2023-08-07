@@ -17,17 +17,14 @@ namespace Agence.Api.Infrastructure.Repositories
 
         private SqlConnection _connection;
         private static IEnumerable<Listing>? Listings;
-        private string connectionString;
+        private string? connectionString;
+        private readonly IConfiguration _configuration;
 
-        public ListingRepository()
+        public ListingRepository(IConfiguration configuration)
         {
-            connectionString = GetConnectionString();
             _connection = new SqlConnection(connectionString);
-        }
-
-        static private string GetConnectionString()
-        {
-            return "Data Source = localhost,1433; Database = MiCasa; Integrated Security = false; User ID = sa; Password = @Reda.2001";
+            _configuration = configuration;
+            connectionString = _configuration.GetConnectionString("MyDB");
         }
 
         public async Task<IEnumerable<Listing>> SearchListingsAsync(string term)
