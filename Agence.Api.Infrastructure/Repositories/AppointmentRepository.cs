@@ -9,7 +9,6 @@ namespace Agence.Api.Infrastructure.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
-        //private SqlConnection _connection;
         private string? connectionString;
         private readonly IConfiguration _configuration;
 
@@ -18,13 +17,7 @@ namespace Agence.Api.Infrastructure.Repositories
         {
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("MyDB");
-            //_connection = new SqlConnection(connectionString);
         }
-
-        //static private string GetConnectionString()
-        //{
-        //    return "Data Source = localhost,1433; Database = MiCasa; Integrated Security = false; User ID = sa; Password = @Reda.2001";
-        //}
 
         public async Task<IActionResult> deleteAppointmentAsync(int appointment_id)
         {

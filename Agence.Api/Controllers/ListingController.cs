@@ -44,5 +44,11 @@ namespace Agence.Api.Controllers
         {
             return await _listingService.PutListingAsync(listing);
         }
+
+        [HttpDelete("/deleteListing/{id}")]
+        public async Task<IActionResult> DeleteListingByIdAsync([FromRoute]int id)
+        {
+            return await _listingService.DeleteListingByIdAsync(id);
+        }
     }
 }

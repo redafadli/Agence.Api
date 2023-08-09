@@ -1,14 +1,8 @@
-﻿using System;
-using System.Reflection.PortableExecutable;
-using Agence.Api.Application.Repositories;
+﻿using Agence.Api.Application.Repositories;
 using Agence.Api.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
-using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Common;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
@@ -63,9 +57,29 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
+        public async Task<IActionResult> DeleteListingByIdAsync(int id)
+        {
+            string sqlDeleteListing = "DELETE FROM Listings WHERE listing_id = @id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand cmdDeleteListing = new SqlCommand(sqlDeleteListing, connection))
+                {
+                    cmdDeleteListing.Parameters.AddWithValue("@id", id);
+
+                    int rowsAffected = await cmdDeleteListing.ExecuteNonQueryAsync();
+
+                    return new OkResult();
+                }
+            }
+        }
+
+
         public async Task<Listing> GetListingByIdAsync(int id)
         {
-            string sqlQuery = "SELECT L.listing_id, L.name, L.price, L.city, L.description, L.address, L.image_urls " +
+            string sqlQuery = "SELECT L.listing_id, L.name, L.price, L.state, L.city, L.description, L.address, L.image_urls " +
                               "FROM Listings L " +
                               "WHERE L.listing_id = @id";
 
@@ -90,14 +104,15 @@ namespace Agence.Api.Infrastructure.Repositories
                                     Id = reader.GetInt32(0),
                                     Name = reader.GetString(1),
                                     Price = reader.GetDouble(2),
-                                    City = reader.GetString(3),
-                                    Description = reader.GetString(4),
-                                    Address = reader.GetString(5),
+                                    State = reader.GetString(3),
+                                    City = reader.GetString(4),
+                                    Description = reader.GetString(5),
+                                    Address = reader.GetString(6),
                                     ImageUrls = new List<string>()
                                 };
 
                                 // Split and add image URLs
-                                string imageUrlsString = reader.IsDBNull(6) ? null : reader.GetString(6);
+                                string imageUrlsString = reader.IsDBNull(7) ? null : reader.GetString(7);
                                 if (!string.IsNullOrEmpty(imageUrlsString))
                                 {
                                     listing.ImageUrls.AddRange(imageUrlsString.Split(','));
@@ -116,8 +131,8 @@ namespace Agence.Api.Infrastructure.Repositories
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
         {
-            string sqlInsertListing = "INSERT INTO Listings (name, price, city, description, address, image_urls) " +
-                "VALUES (@name, @price, @city, @description, @address, @imageUrls)";
+            string sqlInsertListing = "INSERT INTO Listings (name, price, state, city, description, address, image_urls) " +
+                "VALUES (@name, @price, @state, @city, @description, @address, @imageUrls)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -127,6 +142,7 @@ namespace Agence.Api.Infrastructure.Repositories
                 {
                     cmdInsertListing.Parameters.AddWithValue("@name", listing.Name);
                     cmdInsertListing.Parameters.AddWithValue("@price", listing.Price);
+                    cmdInsertListing.Parameters.AddWithValue("@state", listing.State);
                     cmdInsertListing.Parameters.AddWithValue("@city", listing.City);
                     cmdInsertListing.Parameters.AddWithValue("@description", listing.Description);
                     cmdInsertListing.Parameters.AddWithValue("@address", listing.Address);
@@ -142,12 +158,13 @@ namespace Agence.Api.Infrastructure.Repositories
 
         public async Task<IActionResult> PutListingAsync(Listing listing)
         {
-            string sqlQuery = "UPDATE Listings SET name = @name, price = @price, city = @city, description = @description, address = @address" +
+            string sqlQuery = "UPDATE Listings SET name = @name, price = @price, state = @state, city = @city, description = @description, address = @address" +
                 "WHERE listing_id = " + listing.Id;
             using (SqlCommand cmdPutListing = new SqlCommand(sqlQuery, _connection))
             {
                 cmdPutListing.Parameters.AddWithValue("@name", listing.Name);
                 cmdPutListing.Parameters.AddWithValue("@price", listing.Price);
+                cmdPutListing.Parameters.AddWithValue("@state", listing.State);
                 cmdPutListing.Parameters.AddWithValue("@city", listing.City);
                 cmdPutListing.Parameters.AddWithValue("@description", listing.Description);
                 cmdPutListing.Parameters.AddWithValue("@address", listing.Address);

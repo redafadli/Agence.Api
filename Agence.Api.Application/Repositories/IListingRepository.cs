@@ -10,5 +10,6 @@ namespace Agence.Api.Application.Repositories
         Task<Listing> GetListingByIdAsync(int id);
         Task<IActionResult> PostListingAsync(Listing listing);
         Task<IActionResult> PutListingAsync(Listing listing);
+        Task<IActionResult> DeleteListingByIdAsync(int id);
     }
 }

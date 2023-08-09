@@ -14,6 +14,11 @@ namespace Agence.Api.Application.Services {
             _listingRepository = listingRepository;
         }
 
+        public async Task<IActionResult> DeleteListingByIdAsync(int id)
+        {
+            return await _listingRepository.DeleteListingByIdAsync(id);
+        }
+
         public async Task<IEnumerable<Listing>> GetListingsAsync()
         {
             return await _listingRepository.GetListingsAsync();

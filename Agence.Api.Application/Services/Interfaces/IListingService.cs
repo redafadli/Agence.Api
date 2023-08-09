@@ -11,5 +11,6 @@ namespace Agence.Api.Application.Services.Interfaces
         Task<Listing> GetListingAsync(int id);
         Task<IActionResult> PostListingAsync(Listing listing);
         Task<IActionResult> PutListingAsync(Listing listing);
+        Task<IActionResult> DeleteListingByIdAsync(int id);
     }
 }
