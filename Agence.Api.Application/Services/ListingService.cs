@@ -14,10 +14,6 @@ namespace Agence.Api.Application.Services {
             _listingRepository = listingRepository;
         }
 
-        public async Task<IEnumerable<Listing>> SearchListingsAsync(string term)
-        {
-            return await _listingRepository.SearchListingsAsync(term);
-        }
         public async Task<IEnumerable<Listing>> GetListingsAsync()
         {
             return await _listingRepository.GetListingsAsync();

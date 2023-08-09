@@ -18,7 +18,7 @@ namespace Agence.Api.Controllers
         }
 
         [HttpPost("/upload")]
-        public async Task<IActionResult> uploadImage([FromBody] ImageUrlModel imageData)
+        public async Task<ImageUrl> uploadImage([FromBody] ImageUrl imageData)
         {
             return await _imageService.uploadImage(imageData);
         }

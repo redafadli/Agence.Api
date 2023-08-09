@@ -21,27 +21,17 @@ namespace Agence.Api.Infrastructure.Repositories
             cloudinary.Api.Secure = true;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> uploadImage([FromBody] ImageUrlModel imageData)
+        public async Task<ImageUrl> uploadImage(ImageUrl imageData)
         {
-            try
+            var uploadParams = new ImageUploadParams()
             {
-                var uploadParams = new ImageUploadParams()
-                {
 
-                    File = new FileDescription(@"/Users/redafadli/Desktop/TFE/Screenshots 17:04/test.jpg"),
-                    UploadPreset = "ml_default",
-                };
-                var uploadResult = cloudinary.Upload(uploadParams);
-                return await Task.Run(() => new OkResult());
-            }
-            catch
-            {
-                return await Task.Run(() => new BadRequestResult());
-            }
+                File = new FileDescription("image.jpg", imageData.InputImage),
+                UploadPreset = "ml_default",
+            };
+            var uploadResult = cloudinary.Upload(uploadParams);
+
+            return new ImageUrl { ImageUri = uploadResult.SecureUrl };
         }
-
-
     }
 }
-

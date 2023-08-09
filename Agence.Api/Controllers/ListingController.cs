@@ -27,12 +27,6 @@ namespace Agence.Api.Controllers
             return await _listingService.GetListingsAsync();
         }
 
-        [HttpGet("search/{term}")]
-        public async Task<IEnumerable<Listing>> SearchListingsAsync([FromRoute] string term)
-        {
-            return await _listingService.SearchListingsAsync(term);
-        }
-
         [HttpGet("{id}")]
         public async Task<Listing> GetListingAsync([FromRoute] int id)
         {

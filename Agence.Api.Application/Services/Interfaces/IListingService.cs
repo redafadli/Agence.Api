@@ -2,10 +2,11 @@
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Agence.Api.Application.Services.Interfaces {
+namespace Agence.Api.Application.Services.Interfaces
+{
 
-    public interface IListingService {
-        Task<IEnumerable<Listing>> SearchListingsAsync(string term);
+    public interface IListingService
+    {
         Task<IEnumerable<Listing>> GetListingsAsync();
         Task<Listing> GetListingAsync(int id);
         Task<IActionResult> PostListingAsync(Listing listing);

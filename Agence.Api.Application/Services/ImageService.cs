@@ -15,7 +15,7 @@ namespace Agence.Api.Application.Services
 			_imageRepository = imageRepository;
 		}
 
-        public async Task<IActionResult> uploadImage(ImageUrlModel imageData)
+        public async Task<ImageUrl> uploadImage(ImageUrl imageData)
 		{
 			return await _imageRepository.uploadImage(imageData);
 		}

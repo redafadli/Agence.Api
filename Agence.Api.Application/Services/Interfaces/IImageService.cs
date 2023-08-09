@@ -6,7 +6,7 @@ namespace Agence.Api.Application.Services.Interfaces
 {
 	public interface IImageService
 	{
-        Task<IActionResult> uploadImage(ImageUrlModel imageData);
+        Task<ImageUrl> uploadImage(ImageUrl imageData);
 
     }
 }
