@@ -39,8 +39,8 @@ namespace Agence.Api.Controllers
             return await _listingService.PostListingAsync(listing);
 
         }
-        [HttpPut("/editListing/{id}")]
-        public async Task<IActionResult> PutListingAsync([FromBody] Listing listing)
+        [HttpPut("/editListing")]
+        public async Task<IActionResult> PutListingAsync(Listing listing)
         {
             return await _listingService.PutListingAsync(listing);
         }

@@ -16,9 +16,9 @@ namespace Agence.Api.Infrastructure.Repositories
 
         public ListingRepository(IConfiguration configuration)
         {
-            _connection = new SqlConnection(connectionString);
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("MyDB");
+            _connection = new SqlConnection(connectionString);
         }
 
         public async Task<IEnumerable<Listing>> GetListingsAsync()
@@ -42,10 +42,11 @@ namespace Agence.Api.Infrastructure.Repositories
                                 Id = reader.GetInt32(0),
                                 Name = reader.GetString(1),
                                 Price = reader.GetDouble(2),
-                                City = reader.GetString(3),
-                                Description = reader.GetString(4),
-                                Address = reader.GetString(5),
-                                ImageUrls = reader.GetString(6).Split(',').ToList()
+                                State = reader.GetString(3),
+                                City = reader.GetString(4),
+                                Description = reader.GetString(5),
+                                Address = reader.GetString(6),
+                                ImageUrls = reader.GetString(7).Split(',').ToList()
                             };
 
                             listings.Add(listing);
@@ -112,7 +113,7 @@ namespace Agence.Api.Infrastructure.Repositories
                                 };
 
                                 // Split and add image URLs
-                                string imageUrlsString = reader.IsDBNull(7) ? null : reader.GetString(7);
+                                string? imageUrlsString = reader.IsDBNull(7) ? null : reader.GetString(7);
                                 if (!string.IsNullOrEmpty(imageUrlsString))
                                 {
                                     listing.ImageUrls.AddRange(imageUrlsString.Split(','));
@@ -125,9 +126,6 @@ namespace Agence.Api.Infrastructure.Repositories
                 }
             }
         }
-
-
-
 
         public async Task<IActionResult> PostListingAsync(Listing listing)
         {
@@ -158,27 +156,36 @@ namespace Agence.Api.Infrastructure.Repositories
 
         public async Task<IActionResult> PutListingAsync(Listing listing)
         {
-            string sqlQuery = "UPDATE Listings SET name = @name, price = @price, state = @state, city = @city, description = @description, address = @address" +
-                "WHERE listing_id = " + listing.Id;
-            using (SqlCommand cmdPutListing = new SqlCommand(sqlQuery, _connection))
+            string sqlQuery = "UPDATE Listings SET name = @name, price = @price, state = @state, city = @city, description = @description, address = @address " +
+                "WHERE listing_id = @id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                cmdPutListing.Parameters.AddWithValue("@name", listing.Name);
-                cmdPutListing.Parameters.AddWithValue("@price", listing.Price);
-                cmdPutListing.Parameters.AddWithValue("@state", listing.State);
-                cmdPutListing.Parameters.AddWithValue("@city", listing.City);
-                cmdPutListing.Parameters.AddWithValue("@description", listing.Description);
-                cmdPutListing.Parameters.AddWithValue("@address", listing.Address);
-                _connection.Open();
-                int rowsAffected = cmdPutListing.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                await connection.OpenAsync();
+
+                using (SqlCommand cmdPutListing = new SqlCommand(sqlQuery, connection))
                 {
-                    return await Task.Run(() => new OkResult());
-                }
-                else
-                {
-                    return await Task.Run(() => new BadRequestResult());
+                    cmdPutListing.Parameters.AddWithValue("@name", listing.Name);
+                    cmdPutListing.Parameters.AddWithValue("@price", listing.Price);
+                    cmdPutListing.Parameters.AddWithValue("@state", listing.State);
+                    cmdPutListing.Parameters.AddWithValue("@city", listing.City);
+                    cmdPutListing.Parameters.AddWithValue("@description", listing.Description);
+                    cmdPutListing.Parameters.AddWithValue("@address", listing.Address);
+                    cmdPutListing.Parameters.AddWithValue("@id", listing.Id);
+
+                    int rowsAffected = await cmdPutListing.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        return new OkResult();
+                    }
+                    else
+                    {
+                        return new BadRequestResult();
+                    }
                 }
             }
         }
+
     }
 }
