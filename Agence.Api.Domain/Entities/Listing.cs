@@ -11,5 +11,7 @@ namespace Agence.Api.Domain.Entities
         public string? City { get; set; }
         public string? Address { get; set; }
         public List<string> ImageUrls { get; set; } = new List<string>();
+        public int Space { get; set; }
+        public int Rooms { get; set; }
     }
 }
