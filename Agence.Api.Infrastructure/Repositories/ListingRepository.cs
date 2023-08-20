@@ -3,6 +3,7 @@ using Agence.Api.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
@@ -53,7 +54,7 @@ namespace Agence.Api.Infrastructure.Repositories
 
                             listings.Add(listing);
                         }
-
+                        Log.Information("All favorites loaded successfully");
                         return listings;
                     }
                 }
@@ -73,7 +74,7 @@ namespace Agence.Api.Infrastructure.Repositories
                     cmdDeleteListing.Parameters.AddWithValue("@id", id);
 
                     int rowsAffected = await cmdDeleteListing.ExecuteNonQueryAsync();
-
+                    Log.Information("Listing deleted successfully");
                     return new OkResult();
                 }
             }
@@ -124,7 +125,7 @@ namespace Agence.Api.Infrastructure.Repositories
                                 }
                             }
                         }
-
+                        Log.Information("Got listing by id successfully");
                         return listing;
                     }
                 }
@@ -153,7 +154,7 @@ namespace Agence.Api.Infrastructure.Repositories
                     cmdInsertListing.Parameters.AddWithValue("@rooms", listing.Rooms);
 
                     await cmdInsertListing.ExecuteNonQueryAsync();
-
+                    Log.Information("Listing added successfully");
                     return new OkResult();
                 }
             }
@@ -186,15 +187,16 @@ namespace Agence.Api.Infrastructure.Repositories
 
                     if (rowsAffected > 0)
                     {
+                        Log.Information("Listing edited successfully");
                         return new OkResult();
                     }
                     else
                     {
+                        Log.Error("Error during editing the listing");
                         return new BadRequestResult();
                     }
                 }
             }
         }
-
     }
 }

@@ -5,6 +5,7 @@ using CloudinaryDotNet.Actions;
 using dotenv.net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
@@ -30,7 +31,7 @@ namespace Agence.Api.Infrastructure.Repositories
                 UploadPreset = "ml_default",
             };
             var uploadResult = cloudinary.Upload(uploadParams);
-
+            Log.Information("Image uploaded successfully to Cloudinary");
             return new ImageUrl { ImageUri = uploadResult.SecureUrl };
         }
     }

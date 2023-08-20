@@ -3,6 +3,7 @@ using Agence.Api.Application.Repositories;
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
@@ -37,6 +38,7 @@ namespace Agence.Api.Infrastructure.Repositories
                                 User_email = reader.GetString(1),
                                 Listing_id = reader.GetInt32(2)
                             };
+                            Log.Information("Successfully got the favorite by Id");
                             return await Task.Run(() => favorite);
                         }
                         return null;
@@ -66,6 +68,7 @@ namespace Agence.Api.Infrastructure.Repositories
                             newFavorite.Listing_id = reader.GetInt32(2);
                             Favoriteslist.Add(newFavorite);
                         }
+                        Log.Information("Got the favorites of the user successfully");
                         return Favoriteslist;
                     }
                 }
@@ -88,10 +91,12 @@ namespace Agence.Api.Infrastructure.Repositories
                     int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();
                     if (rowsAffected > 0)
                     {
+                        Log.Information("Favorite added successfully");
                         return await Task.Run(() => new OkResult());
                     }
                     else
                     {
+                        Log.Error("Error adding the favorite to the database");
                         return await Task.Run(() => new BadRequestResult());
                     }
                 }
@@ -112,10 +117,12 @@ namespace Agence.Api.Infrastructure.Repositories
                     int rowsAffected = await cmdDeleteFavorite.ExecuteNonQueryAsync();
                     if (rowsAffected > 0)
                     {
+                        Log.Information("Favorite deleted successfully");
                         return await Task.Run(() => new OkResult());
                     }
                     else
                     {
+                        Log.Error("Error deleting the favorite to the database");
                         return await Task.Run(() => new NotFoundResult());
                     }
                 }

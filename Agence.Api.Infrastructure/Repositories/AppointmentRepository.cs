@@ -1,9 +1,9 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using Agence.Api.Application.Repositories;
 using Agence.Api.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace Agence.Api.Infrastructure.Repositories
 {
@@ -33,10 +33,12 @@ namespace Agence.Api.Infrastructure.Repositories
                     int rowsAffected = await cmdDeleteFavorite.ExecuteNonQueryAsync();
                     if (rowsAffected > 0)
                     {
+                        Log.Information("Listing got deleted successfully");
                         return await Task.Run(() => new OkResult());
                     }
                     else
                     {
+                        Log.Error("There was an error in deleting the listing, check Network for more information");
                         return await Task.Run(() => new NotFoundResult());
                     }
                 }
@@ -65,6 +67,7 @@ namespace Agence.Api.Infrastructure.Repositories
                             newAppointment.Listing_id = reader.GetInt32(3);
                             Appointmentslist.Add(newAppointment);
                         }
+                        Log.Information("Appointment retrieved successfully");
                         return Appointmentslist;
                     }
                 }
@@ -90,6 +93,7 @@ namespace Agence.Api.Infrastructure.Repositories
                                 Appointment_date_time = reader.GetDateTime(2),
                                 Listing_id = reader.GetInt32(3)
                             };
+                            Log.Information("Got Appointment By ID successfully");
                             return await Task.Run(() => appointment);
                         }
                         return null;
@@ -115,10 +119,12 @@ namespace Agence.Api.Infrastructure.Repositories
                     int rowsAffected = await cmdPostListing.ExecuteNonQueryAsync();
                     if (rowsAffected > 0)
                     {
+                        Log.Information("Appointment added successfully");
                         return await Task.Run(() => new OkResult());
                     }
                     else
                     {
+                        Log.Error("There was an error adding the appointment");
                         return await Task.Run(() => new BadRequestResult());
                     }
                 }
@@ -146,6 +152,7 @@ namespace Agence.Api.Infrastructure.Repositories
                             newAppointment.Listing_id = reader.GetInt32(3);
                             Appointmentslist.Add(newAppointment);
                         }
+                        Log.Information("All appointments retrieved successfully");
                         return Appointmentslist;
                     }
                 }
