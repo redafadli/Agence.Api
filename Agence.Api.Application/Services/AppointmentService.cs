@@ -17,17 +17,17 @@ namespace Agence.Api.Application.Services
 
         public Task<IActionResult> deleteAppointmentAsync(int appointment_id)
         {
-            return _appointmentRepository.deleteAppointmentAsync(appointment_id);
+            return _appointmentRepository.DeleteAppointmentAsync(appointment_id);
         }
 
         public Task<IEnumerable<Appointment>> getAppointmentByEmailAsync(string user_email)
         {
-            return _appointmentRepository.getAppointmentByEmailAsync(user_email);
+            return _appointmentRepository.GetAppointmentByEmailAsync(user_email);
         }
 
         public Task<Appointment> getAppointmentByIdAsync(int id)
         {
-            return _appointmentRepository.getAppointmentByIdAsync(id);
+            return _appointmentRepository.GetAppointmentByIdAsync(id);
         }
 
         public Task<IEnumerable<Appointment>> GetAppointmentsAsync()
@@ -37,7 +37,7 @@ namespace Agence.Api.Application.Services
 
         public Task<IActionResult> postAppointmentAsync(Appointment appointment)
         {
-            return _appointmentRepository.postAppointmentAsync(appointment);
+            return _appointmentRepository.PostAppointmentAsync(appointment);
         }
     }
 }

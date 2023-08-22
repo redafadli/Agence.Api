@@ -160,7 +160,6 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-
         public async Task<IActionResult> PutListingAsync(Listing listing)
         {
             string sqlQuery = "UPDATE Listings SET name = @name, price = @price, state = @state, city = @city, description = @description," +

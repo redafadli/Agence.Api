@@ -6,7 +6,7 @@ namespace Agence.Api.Application.Repositories
 {
 	public interface IImageRepository
 	{
-        Task<ImageUrl> uploadImage(ImageUrl imageData);
+        Task<ImageUrl> UploadImage(ImageUrl imageData);
 
     }
 }

@@ -19,7 +19,7 @@ namespace Agence.Api.Infrastructure.Repositories
             connectionString = _configuration.GetConnectionString("MyDB");
         }
 
-        public async Task<IActionResult> deleteAppointmentAsync(int appointment_id)
+        public async Task<IActionResult> DeleteAppointmentAsync(int appointment_id)
         {
             string sqlQuery = "DELETE FROM Appointments WHERE appointment_id = @appointmentId";
 
@@ -45,7 +45,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Appointment>> getAppointmentByEmailAsync(string user_email)
+        public async Task<IEnumerable<Appointment>> GetAppointmentByEmailAsync(string user_email)
         {
             string sqlQuery = "SELECT * FROM Appointments WHERE user_email = '" + user_email + "'";
 
@@ -74,7 +74,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<Appointment> getAppointmentByIdAsync(int id)
+        public async Task<Appointment> GetAppointmentByIdAsync(int id)
         {
             string sqlQuery = "SELECT * FROM Appointments WHERE appointment_id = " + id;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -102,7 +102,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<IActionResult> postAppointmentAsync(Appointment appointment)
+        public async Task<IActionResult> PostAppointmentAsync(Appointment appointment)
         {
             string sqlQuery = "INSERT INTO Appointments (user_email, listing_id, date_time) " +
                 "VALUES (@user_email , @listing_id, @date_time)";

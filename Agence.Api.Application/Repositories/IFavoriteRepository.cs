@@ -6,9 +6,9 @@ namespace Agence.Api.Application.Repositories;
 
 public interface IFavoriteRepository
 {
-	Task<IEnumerable<Favorite>> getFavoritesByEmailAsync(string user_email);
-	Task<IActionResult> postFavoriteAsync(Favorite favorite);
-	Task<Favorite> getFavoriteByIdAsync(int id);
-	Task<IActionResult> deleteFavoriteAsync(int favorite_id);
+	Task<IEnumerable<Favorite>> GetFavoritesByEmailAsync(string user_email);
+	Task<IActionResult> PostFavoriteAsync(Favorite favorite);
+	Task<Favorite> GetFavoriteByIdAsync(int id);
+	Task<IActionResult> DeleteFavoriteAsync(int favorite_id);
 }
 

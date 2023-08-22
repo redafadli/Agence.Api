@@ -20,7 +20,7 @@ namespace Agence.Api.Infrastructure.Repositories
             connectionString = _configuration.GetConnectionString("MyDB");
         }
 
-        public async Task<Favorite> getFavoriteByIdAsync(int id)
+        public async Task<Favorite> GetFavoriteByIdAsync(int id)
         {
             string sqlQuery = "SELECT * FROM Favorites WHERE favorite_id = " + id;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -47,7 +47,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Favorite>> getFavoritesByEmailAsync(string user_email)
+        public async Task<IEnumerable<Favorite>> GetFavoritesByEmailAsync(string user_email)
         {
             string sqlQuery = "SELECT * FROM Favorites WHERE user_email = '" + user_email + "'";
 
@@ -75,7 +75,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<IActionResult> postFavoriteAsync(Favorite favorite)
+        public async Task<IActionResult> PostFavoriteAsync(Favorite favorite)
         {
             string sqlQuery = "INSERT INTO Favorites (user_email, listing_id) " +
                 "VALUES (@user_email , @listing_id)";
@@ -103,7 +103,7 @@ namespace Agence.Api.Infrastructure.Repositories
             }
         }
 
-        public async Task<IActionResult> deleteFavoriteAsync(int favorite_id)
+        public async Task<IActionResult> DeleteFavoriteAsync(int favorite_id)
         {
             string sqlQuery = "DELETE FROM Favorites WHERE favorite_id = @favoriteId";
 

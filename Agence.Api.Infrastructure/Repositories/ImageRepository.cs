@@ -22,7 +22,7 @@ namespace Agence.Api.Infrastructure.Repositories
             cloudinary.Api.Secure = true;
         }
 
-        public async Task<ImageUrl> uploadImage(ImageUrl imageData)
+        public async Task<ImageUrl> UploadImage(ImageUrl imageData)
         {
             var uploadParams = new ImageUploadParams()
             {
